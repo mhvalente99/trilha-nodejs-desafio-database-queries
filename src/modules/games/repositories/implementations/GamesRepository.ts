@@ -13,10 +13,12 @@ export class GamesRepository implements IGamesRepository {
   }
 
   async findByTitleContaining(param: string): Promise<Game[]> {
-    const game: Game[] = [];
-    return game;//this.repository
-      //.createQueryBuilder()
-      // Complete usando query builder
+    const game = await this.repository
+      .createQueryBuilder()
+      .where("LOWER(title) LIKE :title", { title: `%${param.toLocaleLowerCase()}%` })
+      .getMany();
+
+    return game;
   }
 
   async countAllGames(): Promise<[{ count: string }]> {
