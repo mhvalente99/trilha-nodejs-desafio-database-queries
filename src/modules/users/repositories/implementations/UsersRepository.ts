@@ -18,9 +18,6 @@ export class UsersRepository implements IUsersRepository {
       relations: ['games']
     });
 
-    console.log(user);
-
-
     if (!user) {
       throw new Error("User not found");
     }
@@ -29,8 +26,10 @@ export class UsersRepository implements IUsersRepository {
   }
 
   async findAllUsersOrderedByFirstName(): Promise<User[]> {
-    const users: User[] = [];
-    return users; //this.repository.query(); // Complete usando raw query
+    const SQL = `SELECT * FROM users ORDER BY first_name`;
+
+    const users: User[] = await this.repository.query(SQL);
+    return users;
   }
 
   async findUserByFullName({
