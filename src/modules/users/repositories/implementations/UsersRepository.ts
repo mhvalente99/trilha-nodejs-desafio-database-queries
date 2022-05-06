@@ -19,14 +19,14 @@ export class UsersRepository implements IUsersRepository {
     });
 
     if (!user) {
-      throw new Error("User not found");
+      throw new Error('User not found');
     }
 
     return user;
   }
 
   async findAllUsersOrderedByFirstName(): Promise<User[]> {
-    const SQL = `SELECT * FROM users ORDER BY first_name`;
+    const SQL = 'SELECT * FROM users ORDER BY first_name';
 
     const users: User[] = await this.repository.query(SQL);
     return users;
@@ -36,6 +36,10 @@ export class UsersRepository implements IUsersRepository {
     first_name,
     last_name,
   }: IFindUserByFullNameDTO): Promise<User[] | undefined> {
-    return undefined; //this.repository.query(); // Complete usando raw query
+    const SQL = 'SELECT * FROM users WHERE LOWER(first_name) = $1 AND LOWER(last_name) = $2';
+
+    const user: User[] | undefined = await this.repository.query(SQL, [first_name.toLowerCase(), last_name.toLowerCase()]);
+
+    return user;
   }
 }
